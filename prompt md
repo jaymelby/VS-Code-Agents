@@ -1,0 +1,47 @@
+# Specification: Agentic Governance & Strategy Dashboard (High Fidelity)
+
+## 1. Executive Vision
+Build a sophisticated, enterprise-grade single-page application (SPA) to serve as the visual "North Star" for our Agentic Framework. The UI should look like a premium SaaS dashboard (think Stripe or Vercel) but tailored for Financial Services operations.
+
+## 2. Technical Stack (Single File Requirement)
+- **CSS:** Tailwind CSS via CDN.
+- **JS/State:** Alpine.js via CDN (for reactivity without a build step).
+- **Icons:** Lucide Icons (via CDN or SVG injection).
+- **Typography:** 'Inter' or 'Geist' sans-serif fonts.
+
+## 3. UI Layout & Navigation
+- **Sidebar/Header:** Modern navigation for: [Framework Overview], [Classification Matrix], [Process Lock Lab], and [Governance Calculator].
+- **Theme:** "Slate & Indigo" with subtle gradients and "glassmorphism" card effects.
+
+## 4. Key Component: The Classification Matrix (The 4 Classes)
+Create 4 interactive cards representing the Agentic Levels:
+- **Class I: Observer (Read-Only)** - Focus on summarization and alerts.
+- **Class II: Collaborator (Drafting)** - Focus on "suggested" next steps for Rep approval.
+- **Class III: Operator (Restricted Write)** - Focus on specific task execution (CRM updates).
+- **Class IV: Autonomous (Orchestrator)** - Multi-step goal-seeking across systems.
+- *Visual:* Each card should have a "Capability Bar" (progress bar) and a list of "Safety Guardrails" that appear on hover.
+
+## 5. Key Component: The "Agentic Lock" Simulator
+A visual playground to demonstrate process integrity:
+- **UI Elements:** A toggle switch labeled "Activate Agentic Flow."
+- **Interaction:** When toggled ON, the "Human UI" section of the dashboard should visually dim and show a "LOCKED: AGENT PROCESSING" overlay with a pulsing lock icon.
+- **Goal:** Socialize the concept of "State Locking" to prevent race conditions between Reps and Agents.
+
+## 6. Key Component: The Weighted Governance Calculator
+A real-time tool for prioritizing projects.
+- **Input Inputs (Range 1-10):**
+    1. **Business Value (40%):** Rep efficiency & revenue impact.
+    2. **Compliance & Risk (30%):** Data privacy, hallucination cost, and auditability.
+    3. **Dev Complexity (20%):** API availability and data readiness.
+    4. **Speed to Market (10%):** OOTB vs. Custom build.
+- **Real-time Output:** A "Priority Score" gauge.
+- **CRITICAL LOGIC:** If "Compliance & Risk" is > 8, the score should turn RED, and a "STOP: Compliance Interlock Required" banner must appear.
+
+## 7. Interactive Content Sections
+- **Impacted Process Mapper:** A vertical timeline or "Rep Journey" flowchart. Users can click a step (e.g., "ID Verification") and assign an Agent Class to it.
+- **The "Vibe":** Use smooth transitions (`transition-all duration-300`), subtle shadows (`shadow-sm` to `shadow-xl` on hover), and clear typography.
+
+## 8. Development Instructions for Copilot
+- Use a single `<style>` block for custom Tailwind configuration or animations.
+- Use a single `<script>` block for Alpine.js logic.
+- Ensure the code is "plug-and-play" for a Confluence HTML macro.
