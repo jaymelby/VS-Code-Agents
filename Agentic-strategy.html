@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agent Strategy Playbook v5.0</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            900: '#0c4a6e',
+                        },
+                        accent: {
+                            500: '#10b981',
+                            600: '#059669',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .glass-panel { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .doc-link { display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.75rem; font-weight: 600; color: #0284c7; text-decoration-line: underline; text-decoration-color: #bae6fd; text-underline-offset: 4px; transition: all 0.2s; margin-top: 0.5rem; }
+        .doc-link:hover { color: #0369a1; text-decoration-color: #0284c7; }
+
+        /* Custom Flowchart CSS */
+        .flow-card { position: relative; z-index: 10; background: white; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); border: 1px solid #e2e8f0; width: 100%; transition: transform 0.2s; }
+        .flow-card:hover { transform: translateY(-2px); }
+        .flow-arrow { display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 1.5rem; padding: 0.5rem 0; }
+        @media (min-width: 768px) {
+            .flow-container { display: flex; align-items: stretch; justify-content: space-between; gap: 1rem; }
+            .flow-card { width: 22%; }
+            .flow-arrow { flex-direction: row; padding: 0 0.5rem; transform: rotate(0deg); }
+        }
+        @media (max-width: 767px) {
+            .flow-arrow { transform: rotate(90deg); margin: 0.5rem 0; }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased leading-relaxed">
+
+    <nav class="fixed w-full z-50 glass-panel border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-brand-600 rounded-lg flex items-center justify-center text-white shadow-md">
+                        <i class="fa-solid fa-network-wired text-lg"></i>
+                    </div>
+                    <span class="font-bold text-xl tracking-tight text-slate-900">Agentic<span class="text-brand-600">Strategy</span></span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#executive-summary" class="text-sm font-medium text-slate-600 hover:text-brand-600 transition">Thesis</a>
+                    <a href="#architectures" class="text-sm font-medium text-slate-600 hover:text-brand-600 transition">Architectures & Ops</a>
+                    <a href="#playbook" class="text-sm font-medium text-slate-600 hover:text-brand-600 transition">Execution Playbook</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header id="executive-summary" class="pt-32 pb-20 bg-gradient-to-br from-slate-900 to-brand-900 text-white relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute -top-24 -right-24 w-96 h-96 bg-brand-500 rounded-full blur-3xl"></div>
+            <div class="absolute top-1/2 left-0 w-72 h-72 bg-accent-500 rounded-full blur-3xl"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="max-w-3xl">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-sm font-medium mb-6 backdrop-blur-md">
+                    <i class="fa-solid fa-layer-group text-amber-400"></i>
+                    Enterprise Master Playbook v5.0
+                </div>
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
+                    The Domain-Expert <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-100 to-brand-500">Orchestrator.</span>
+                </h1>
+                <p class="text-xl text-slate-300 mb-8 leading-relaxed font-light">
+                    Governing a dual-stack architecture requires untangling perceived AI risk from operational reality. You are the liability shield that dictates FinOps, enforces forensic auditing, and safely unlocks enterprise scale.
+                </p>
+                <div class="flex gap-4">
+                    <a href="#architectures" class="px-6 py-3 bg-brand-600 hover:bg-brand-500 text-white rounded-lg font-medium transition shadow-lg shadow-brand-500/30 flex items-center gap-2">
+                        Open Operations Manual <i class="fa-solid fa-arrow-down"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="architectures" class="py-20 bg-slate-50 border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row gap-12">
+                
+                <div class="lg:w-[30%]">
+                    <div class="sticky top-24">
+                        <h2 class="text-sm font-bold text-brand-600 tracking-wide uppercase mb-2">Master Index</h2>
+                        <h3 class="text-2xl font-bold text-slate-900 mb-4">Frameworks & Ops</h3>
+                        <p class="text-slate-500 mb-6 text-sm leading-relaxed">
+                            Navigate the technical, financial, and operational doctrines required to govern the enterprise AI strategy.
+                        </p>
+                        
+                        <div class="space-y-1.5 max-h-[65vh] overflow-y-auto pr-3 custom-scrollbar" id="tab-buttons">
+                            
+                            <div class="pt-2 pb-1 border-b border-slate-200 mb-2 mt-1">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider pl-4">Strategic Topologies</span>
+                            </div>
+                            <button onclick="openTab('tab1', this)" class="w-full text-left px-4 py-3 rounded-xl font-semibold text-sm transition active-tab bg-white shadow-sm border border-brand-200 text-brand-700 flex items-center gap-3">
+                                <i class="fa-solid fa-shield-cat w-4 text-center"></i> Risk: Agent vs RPA
+                            </button>
+                            <button onclick="openTab('tab8', this)" class="w-full text-left px-4 py-3 rounded-xl font-semibold text-sm transition text-slate-600 hover:bg-white hover:text-slate-900 border border-transparent flex items-center gap-3">
+                                <i class="fa-solid fa-layer-group w-4 text-center"></i> Dual-Stack Topology
+                            </button>
+                            
+                            <div class="pt-5 pb-1 border-b border-slate-200 mb-2">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider pl-4">Operations & Governance</span>
+                            </div>
+                            <button onclick="openTab('tab9', this)" class="w-full text-left px-4 py-3 rounded-xl font-semibold text-sm transition text-slate-600 hover:bg-white hover:text-slate-900 border border-transparent flex items-center gap-3">
+                                <i class="fa-solid fa-file-invoice-dollar w-4 text-center"></i> FinOps & Chargeback
+                            </button>
+                            <button onclick="openTab('tab10', this)" class="w-full text-left px-4 py-3 rounded-xl font-semibold text-sm transition text-slate-600 hover:bg-white hover:text-slate-900 border border-transparent flex items-center gap-3">
+                                <i class="fa-solid fa-magnifying-glass-chart w-4 text-center"></i> Forensic Auditing
+                            </button>
+                            <button onclick="openTab('tab11', this)" class="w-full text-left px-4 py-3 rounded-xl font-semibold text-sm transition text-slate-600 hover:bg-white hover:text-slate-900 border border-transparent flex items-center gap-3">
+                                <i class="fa-solid fa-triangle-exclamation w-4 text-center"></i> Incident Response (Kill Switch)
+                            </button>
+                            <button onclick="openTab('tab12', this)" class="w-full text-left px-4 py-3 rounded-xl font-semibold text-sm transition text-slate-600 hover:bg-white hover:text-slate-900 border border-transparent flex items-center gap-3">
+                                <i class="fa-solid fa-people-arrows w-4 text-center"></i> Front-Line Change Mgmt
+                            </button>
+
+                            <div class="pt-5 pb-1 border-b border-slate-200 mb-2">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider pl-4">Engineering Frameworks</span>
+                            </div>
+                            <button onclick="openTab('tab2', this)" class="w-full text-left px-4 py-3 rounded-xl font-semibold text-sm transition text-slate-600 hover:bg-white hover:text-slate-900 border border-transparent flex items-center gap-3">
+                                <i class="fa-solid fa-scale-balanced w-4 text-center"></i> Evals & Guardrails
+                            </button>
+                            <button onclick="openTab('tab3', this)" class="w-full text-left px-4 py-3 rounded-xl font-semibold text-sm transition text-slate-600 hover:bg-white hover:text-slate-900 border border-transparent flex items-center gap-3">
+                                <i class="fa-solid fa-users-gear w-4 text-center"></i> Multi-Agent Systems
+                            </button>
+                            <button onclick="openTab('tab4', this)" class="w-full text-left px-4 py-3 rounded-xl font-semibold text-sm transition text-slate-600 hover:bg-white hover:text-slate-900 border border-transparent flex items-center gap-3">
+                                <i class="fa-solid fa-diagram-project w-4 text-center"></i> GraphRAG & Ontology
+                            </button>
+                            <button onclick="openTab('tab6', this)" class="w-full text-left px-4 py-3 rounded-xl font-semibold text-sm transition text-slate-600 hover:bg-white hover:text-slate-900 border border-transparent flex items-center gap-3">
+                                <i class="fa-solid fa-shield-halved w-4 text-center"></i> Adversarial Threats
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:w-[70%]">
+                    
+                    <div id="tab1" class="tab-content active bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                        <div class="inline-flex px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold uppercase tracking-wider mb-4 border border-emerald-100">Managing Legal & Compliance</div>
+                        <h4 class="text-3xl font-bold text-slate-900 mb-4">Defusing "Agent vs. RPA"</h4>
+                        <p class="text-slate-600 mb-8 leading-relaxed">When Risk teams see a chat interface trigger a complex system action, they incorrectly assume the AI "hallucinated" the execution steps. Present the <strong>"Intent Router vs. Execution Engine"</strong> paradigm: The AI is just the waiter taking the order; the legacy Salesforce Flow is still the kitchen doing the exact same cooking.</p>
+                        
+                        <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 mb-8">
+                            <h5 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-6 text-center">The "Waiter to Kitchen" Workflow</h5>
+                            
+                            <div class="flow-container flex-col md:flex-row">
+                                <div class="flow-card border-t-4 border-slate-400">
+                                    <div class="text-slate-400 mb-2 text-2xl"><i class="fa-solid fa-user-tie"></i></div>
+                                    <h6 class="font-bold text-slate-800 text-sm">1. The Patron</h6>
+                                    <p class="text-xs text-slate-500 mt-2">User types unstructured request: <em>"Update address for Acme Corp."</em></p>
+                                </div>
+                                <div class="flow-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                                <div class="flow-card border-t-4 border-brand-500 bg-brand-50/30">
+                                    <div class="text-brand-500 mb-2 text-2xl"><i class="fa-solid fa-comment-dots"></i></div>
+                                    <h6 class="font-bold text-brand-900 text-sm">2. The Waiter (LLM)</h6>
+                                    <p class="text-xs text-slate-600 mt-2">Agentforce NUI extracts intent and maps it to a specific Action.</p>
+                                    <span class="inline-block mt-2 px-2 py-0.5 bg-brand-100 text-brand-700 text-[10px] font-bold rounded">PROBABILISTIC</span>
+                                </div>
+                                <div class="flow-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                                <div class="flow-card border-t-4 border-accent-500 bg-accent-50/30">
+                                    <div class="text-accent-500 mb-2 text-2xl"><i class="fa-solid fa-gears"></i></div>
+                                    <h6 class="font-bold text-accent-900 text-sm">3. The Kitchen (Flow)</h6>
+                                    <p class="text-xs text-slate-600 mt-2">LLM hands a structured "ticket" to a pre-approved, deterministic Flow.</p>
+                                    <span class="inline-block mt-2 px-2 py-0.5 bg-accent-100 text-accent-700 text-[10px] font-bold rounded">DETERMINISTIC</span>
+                                </div>
+                                <div class="flow-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                                <div class="flow-card border-t-4 border-amber-500">
+                                    <div class="text-amber-500 mb-2 text-2xl"><i class="fa-solid fa-user-check"></i></div>
+                                    <h6 class="font-bold text-slate-800 text-sm">4. The Pass (HITL)</h6>
+                                    <p class="text-xs text-slate-500 mt-2">Flow pauses. The human reviews the proposed data change and clicks "Approve".</p>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6 p-4 bg-white rounded border border-emerald-100 border-l-4 border-l-emerald-500">
+                                <p class="text-sm text-emerald-800 font-medium">
+                                    <strong>The Argument for Risk:</strong> "If this Salesforce Flow was deemed safe when triggered by a button click in 2022, it is mathematically just as safe today. We only changed the button to a natural language trigger."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="tab8" class="tab-content bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                        <div class="inline-flex px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold uppercase tracking-wider mb-4 border border-indigo-100">Enterprise Architecture</div>
+                        <h4 class="text-3xl font-bold text-slate-900 mb-4">Dual-Stack Topology</h4>
+                        <p class="text-slate-600 mb-8 leading-relaxed">Attempting to force a single AI platform across all use cases leads to bloated budgets and compromised security. The modern strategy embraces a <strong>Dual-Stack Architecture</strong>, utilizing Salesforce Agentforce for CRM-native tasks and Google Vertex for broad, cross-silo enterprise orchestration.</p>
+                        
+                        <div class="space-y-8">
+                            <div>
+                                <h5 class="text-xl font-bold text-slate-800 mb-3 flex items-center gap-2">
+                                    <i class="fa-brands fa-salesforce text-[#00A1E0] text-2xl"></i> Stack 1: Salesforce Agentforce (The "Micro")
+                                </h5>
+                                <div class="pl-6 border-l-2 border-[#00A1E0]/30 space-y-3">
+                                    <p class="text-sm text-slate-600 leading-relaxed"><strong>The Mandate:</strong> Designed for targeted, contextual workflows directly serving Sales and Relationship Management employees, operating strictly within CRM boundaries.</p>
+                                    <p class="text-sm text-slate-600 leading-relaxed"><strong>Strengths:</strong> Leverages existing Salesforce RBAC instantly. Highly deterministic for structured tasks (updating records, triggering onboarding sequences) using pre-approved Flows.</p>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h5 class="text-xl font-bold text-slate-800 mb-3 flex items-center gap-2">
+                                    <i class="fa-brands fa-google text-[#4285F4] text-2xl"></i> Stack 2: Google Vertex + MCP (The "Macro")
+                                </h5>
+                                <div class="pl-6 border-l-2 border-[#4285F4]/30 space-y-3">
+                                    <p class="text-sm text-slate-600 leading-relaxed"><strong>The Mandate:</strong> The omni-directional brain for complex, multi-hop reasoning that spans the entire enterprise beyond the CRM.</p>
+                                    <p class="text-sm text-slate-600 leading-relaxed"><strong>Strengths:</strong> Powered by frontier models (Gemini 1.5 Pro). Utilizes the Model Context Protocol (MCP) to securely connect to external APIs, BigQuery, and custom micro-agents.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="tab9" class="tab-content bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                        <div class="inline-flex px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold uppercase tracking-wider mb-4 border border-blue-100">Protecting the IT Budget</div>
+                        <h4 class="text-3xl font-bold text-slate-900 mb-4">FinOps & The Chargeback Model</h4>
+                        <p class="text-slate-600 mb-6 leading-relaxed">If IT pays for all AI compute, the budget will collapse within 12 months. When a specific division (e.g., Wealth Management) uses Vertex to automate 10,000 hours of labor, they reap the P&L rewards—therefore, they must absorb the token costs.</p>
+                        
+                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-6 mb-6">
+                            <h5 class="font-bold text-slate-800 mb-3 text-lg border-b border-slate-200 pb-2">The Token Chargeback Strategy</h5>
+                            <ul class="space-y-4">
+                                <li class="flex items-start gap-3">
+                                    <i class="fa-solid fa-1 text-blue-600 mt-1"></i>
+                                    <div>
+                                        <strong class="text-slate-800 text-sm">Implement an LLM Gateway (e.g., LiteLLM, Portkey):</strong> 
+                                        <p class="text-sm text-slate-600 mt-1">Never let internal apps call Vertex APIs directly. Route all requests through an AI API Gateway. The Gateway standardizes logs, enforces rate limits, and, crucially, intercepts every API call to extract the <code>User_ID</code> and <code>Department_Code</code>.</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fa-solid fa-2 text-blue-600 mt-1"></i>
+                                    <div>
+                                        <strong class="text-slate-800 text-sm">Metadata Tagging for Telemetry:</strong> 
+                                        <p class="text-sm text-slate-600 mt-1">Mandate that every Agent deployed on the Enterprise Registry passes metadata headers (e.g., <code>Cost_Center="Wealth_Advisory_North"</code>) alongside its payload. If a rogue agent lacks these headers, the Gateway rejects the request.</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fa-solid fa-3 text-blue-600 mt-1"></i>
+                                    <div>
+                                        <strong class="text-slate-800 text-sm">Automated P&L Routing:</strong> 
+                                        <p class="text-sm text-slate-600 mt-1">Use Datadog LLM Observability or LangFuse to aggregate these tags. At the end of the month, generate an automated FinOps report that charges the exact token consumption cost back to the respective business unit's OPEX budget.</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div id="tab10" class="tab-content bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                        <div class="inline-flex px-3 py-1 rounded-full bg-purple-50 text-purple-700 text-xs font-bold uppercase tracking-wider mb-4 border border-purple-100">The "FINRA Day" Protocol</div>
+                        <h4 class="text-3xl font-bold text-slate-900 mb-4">Forensic Auditing & Data Lineage</h4>
+                        <p class="text-slate-600 mb-6 leading-relaxed">Three years from now, FINRA will audit a trade recommendation made by an agent. If your answer is "the black box told us to," the firm faces catastrophic fines. You must architect for retroactive determinism.</p>
+                        
+                        <div class="space-y-6">
+                            <div class="p-5 bg-purple-50 rounded-lg border border-purple-100">
+                                <h5 class="font-bold text-purple-900 flex items-center gap-2 mb-2"><i class="fa-solid fa-receipt"></i> The Immutable Receipt</h5>
+                                <p class="text-sm text-purple-800 mb-3">Every time an Agentforce action executes or a Vertex MCP sequence completes, it must write a "Forensic Receipt" to WORM (Write Once, Read Many) compliant storage. This receipt must contain:</p>
+                                <ul class="list-disc pl-5 text-sm text-purple-800 space-y-1">
+                                    <li><strong>The Prompt Context:</strong> The exact system prompt used (e.g., <code>v2.4.1_Wealth_Advisor_Prompt</code>).</li>
+                                    <li><strong>The Model State:</strong> The exact model and weight version (e.g., <code>gemini-1.5-pro-002</code>) and temperature settings.</li>
+                                    <li><strong>The Data Snapshot:</strong> A hash of the specific RAG documents or CRM records the agent read at that exact millisecond. If the policy changed the next day, you can prove the agent acted correctly on the information available <em>at that time</em>.</li>
+                                    <li><strong>The User State:</strong> The active directory token and the exact time the user clicked "Approve" (The HITL signature).</li>
+                                </ul>
+                            </div>
+                            
+                            <p class="text-sm text-slate-600 border-l-4 border-slate-300 pl-4 py-1 italic">
+                                "The goal is not to prove the AI is perfect; the goal is to prove the AI's logic is perfectly traceable."
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="tab11" class="tab-content bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                        <div class="inline-flex px-3 py-1 rounded-full bg-red-50 text-red-700 text-xs font-bold uppercase tracking-wider mb-4 border border-red-100">Crisis Mitigation</div>
+                        <h4 class="text-3xl font-bold text-slate-900 mb-4">The Enterprise Kill Switch</h4>
+                        <p class="text-slate-600 mb-6 leading-relaxed">Agents <em>will</em> fail. They will hallucinate a bad process or face an adversarial attack. You cannot wait for an incident to figure out how to unplug them. You need pre-approved "Degraded State" protocols.</p>
+                        
+                        <div class="relative pl-6 border-l-4 border-red-200 space-y-8 mt-6">
+                            <div class="relative">
+                                <div class="absolute -left-[32px] top-1 w-6 h-6 rounded-full bg-white border-4 border-amber-400 flex items-center justify-center text-[10px] font-bold text-slate-800">1</div>
+                                <h5 class="font-bold text-slate-800 text-lg">Level 1: Surgical Feature Flagging</h5>
+                                <p class="text-sm text-slate-600 mt-2 leading-relaxed">
+                                    <strong>Scenario:</strong> A specific Agentforce Flow (e.g., "Draft Client Apology") starts behaving erratically.<br>
+                                    <strong>Action:</strong> Disable the specific intent mapping via LaunchDarkly (or internal feature flags) without bringing down the rest of the CRM chat functionality. The UI gracefully degrades: <em>"This specific action is currently under maintenance."</em>
+                                </p>
+                            </div>
+                            <div class="relative">
+                                <div class="absolute -left-[32px] top-1 w-6 h-6 rounded-full bg-white border-4 border-orange-500 flex items-center justify-center text-[10px] font-bold text-slate-800">2</div>
+                                <h5 class="font-bold text-slate-800 text-lg">Level 2: Model Hot-Swapping</h5>
+                                <p class="text-sm text-slate-600 mt-2 leading-relaxed">
+                                    <strong>Scenario:</strong> A new vendor model update breaks the underlying reasoning logic enterprise-wide.<br>
+                                    <strong>Action:</strong> Using your AI Gateway (from Tab 9), execute a single-click rollback. Route all API traffic back to the previous stable model version (e.g., swap from <code>Model_v3</code> back to <code>Model_v2.5</code>). Zero downtime for end users.
+                                </p>
+                            </div>
+                            <div class="relative">
+                                <div class="absolute -left-[32px] top-1 w-6 h-6 rounded-full bg-white border-4 border-red-600 flex items-center justify-center text-[10px] font-bold text-slate-800">3</div>
+                                <h5 class="font-bold text-slate-800 text-lg">Level 3: The Global Kill Switch</h5>
+                                <p class="text-sm text-slate-600 mt-2 leading-relaxed">
+                                    <strong>Scenario:</strong> Massive data exfiltration detected via Confused Deputy Attack in the Vertex environment.<br>
+                                    <strong>Action:</strong> Sever all MCP (Model Context Protocol) server connections to internal databases. The LLMs can still chat, but they are instantly isolated from enterprise data. Trigger pre-written mass-comm to all 40,000 employees: <em>"Our AI assistants are currently undergoing emergency security maintenance. Please revert to manual processing."</em>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="tab12" class="tab-content bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                        <div class="inline-flex px-3 py-1 rounded-full bg-teal-50 text-teal-700 text-xs font-bold uppercase tracking-wider mb-4 border border-teal-100">Human Dynamics</div>
+                        <h4 class="text-3xl font-bold text-slate-900 mb-4">Front-Line Change Management</h4>
+                        <p class="text-slate-600 mb-6 leading-relaxed">The technology is only 20% of the battle. Your 40,000 employees represent the true bottleneck. You must proactively manage the two psychological extremes of AI adoption.</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                            <div class="p-5 bg-slate-50 border border-slate-200 rounded-xl">
+                                <h5 class="font-bold text-slate-800 mb-2"><i class="fa-solid fa-user-shield text-slate-400"></i> Algorithm Aversion</h5>
+                                <p class="text-sm text-slate-600"><strong>The Profile:</strong> Typically tenured veterans. They refuse to use the agent because "a machine doesn't know my clients."</p>
+                                <p class="text-sm text-slate-600 mt-2"><strong>The Fix:</strong> Implement <em>Confidence Scores</em> in the UI. Instead of the AI demanding an action, it suggests: "Based on 3 recent emails (linked here), I am 92% confident this client needs an address update." Show the math to earn trust.</p>
+                            </div>
+                            <div class="p-5 bg-slate-50 border border-slate-200 rounded-xl">
+                                <h5 class="font-bold text-slate-800 mb-2"><i class="fa-solid fa-robot text-teal-500"></i> Automation Complacency</h5>
+                                <p class="text-sm text-slate-600"><strong>The Profile:</strong> Typically junior employees. They blindly trust the AI and aggressively hit "Approve" on every HITL prompt without reading it.</p>
+                                <p class="text-sm text-slate-600 mt-2"><strong>The Fix:</strong> Engineer <em>Productive Friction</em>. If an Agentforce Flow alters critical financial data, force the user to manually re-type a key value (like the client's last name) before the "Execute" button unlocks.</p>
+                            </div>
+                        </div>
+
+                        <h5 class="font-bold text-slate-800 text-lg mb-3 border-b border-slate-200 pb-2">The Evals Feedback Loop</h5>
+                        <p class="text-sm text-slate-600 leading-relaxed">Every Agentforce and Vertex interface must have an aggressive, simple feedback mechanism (Thumbs Up / Thumbs Down / Edit). If a user edits an AI-drafted email before sending it, that diff (the difference between the AI draft and the human edit) must be automatically piped back into your LangSmith Evals dashboard. The human workforce becomes your distributed QA team, continuously refining the system prompts.</p>
+                    </div>
+
+                    <div id="tab2" class="tab-content bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                        <div class="inline-flex px-3 py-1 rounded-full bg-brand-50 text-brand-700 text-xs font-bold uppercase tracking-wider mb-4 border border-brand-100">Testing & Enforcement</div>
+                        <h4 class="text-2xl font-bold text-slate-900 mb-4">"Evals" & Deterministic Guardrails</h4>
+                        <p class="text-slate-600 mb-4">Build pipelines where smaller models act as "judges" grading the primary Vertex agent on faithfulness. Use NeMo Guardrails to apply strict software wrappers.</p>
+                        <a href="https://docs.smith.langchain.com/" target="_blank" class="doc-link">LangSmith Docs <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                    </div>
+                    <div id="tab3" class="tab-content bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                        <div class="inline-flex px-3 py-1 rounded-full bg-brand-50 text-brand-700 text-xs font-bold uppercase tracking-wider mb-4 border border-brand-100">The Maker-Checker Pattern</div>
+                        <h4 class="text-2xl font-bold text-slate-900 mb-4">Multi-Agent Systems (MAS)</h4>
+                        <p class="text-slate-600 mb-4">Utilize the Maker-Checker Pattern: one agent researches, and an isolated agent scans against SEC Reg BI before passing the payload to an MCP server.</p>
+                        <a href="https://modelcontextprotocol.io/" target="_blank" class="doc-link">MCP Official Spec <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                    </div>
+                    <div id="tab4" class="tab-content bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                        <div class="inline-flex px-3 py-1 rounded-full bg-brand-50 text-brand-700 text-xs font-bold uppercase tracking-wider mb-4 border border-brand-100">The Knowledge Layer</div>
+                        <h4 class="text-2xl font-bold text-slate-900 mb-4">GraphRAG & Ontology</h4>
+                        <p class="text-slate-600 mb-4">GraphRAG maps data silos into semantic networks, allowing Vertex agents to understand explicit relationships with high traceability.</p>
+                    </div>
+                    <div id="tab6" class="tab-content bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                        <div class="inline-flex px-3 py-1 rounded-full bg-rose-50 text-rose-700 text-xs font-bold uppercase tracking-wider mb-4 border border-rose-100">InfoSec Threat Vector</div>
+                        <h4 class="text-2xl font-bold text-slate-900 mb-4">Adversarial AI</h4>
+                        <p class="text-slate-600 mb-4">Defend against Indirect Prompt Injection (hidden commands in client PDFs) and Confused Deputy Attacks by strictly limiting agent tools.</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="playbook" class="py-20 bg-slate-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-sm font-bold text-brand-400 tracking-wide uppercase">The Mandate</h2>
+                <h3 class="text-3xl font-bold mt-2">Executive Action Plan</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-slate-800 rounded-2xl p-8 border border-slate-700 relative overflow-hidden">
+                    <div class="absolute -top-6 -right-6 text-slate-700 text-6xl opacity-30"><i class="fa-solid fa-chess-knight"></i></div>
+                    <div class="w-10 h-10 bg-brand-500/20 text-brand-400 rounded-full flex items-center justify-center text-lg mb-4 font-bold">1</div>
+                    <h4 class="text-lg font-bold mb-2">Build the Registry</h4>
+                    <p class="text-sm text-slate-300">Become the Governance Tollbooth. Mandate every deployed Agent passes through a strict FinOps gateway, Data Privacy check, and FINRA audit.</p>
+                </div>
+
+                <div class="bg-slate-800 rounded-2xl p-8 border border-slate-700">
+                    <div class="w-10 h-10 bg-accent-500/20 text-accent-400 rounded-full flex items-center justify-center text-lg mb-4 font-bold">2</div>
+                    <h4 class="text-lg font-bold mb-2">Govern the Friction</h4>
+                    <p class="text-sm text-slate-300">Fight automation complacency. Force users to interact with "Centaur workflows" by manually verifying critical output parameters before hitting execute.</p>
+                </div>
+
+                <div class="bg-slate-800 rounded-2xl p-8 border border-slate-700">
+                    <div class="w-10 h-10 bg-amber-500/20 text-amber-400 rounded-full flex items-center justify-center text-lg mb-4 font-bold">3</div>
+                    <h4 class="text-lg font-bold mb-2">Own the Lineage</h4>
+                    <p class="text-sm text-slate-300">Ensure every action taken by the Dual-Stack architecture generates an immutable receipt. When the regulator audits the logic, you have the math.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-slate-950 text-slate-500 py-8 text-center text-sm">
+        <div class="max-w-7xl mx-auto px-4">
+            <p>Generated for the Director of AI Agent Strategy &bull; Actionable Intelligence & Frameworks</p>
+        </div>
+    </footer>
+
+    <script>
+        function openTab(tabId, element) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.getElementById(tabId).classList.add('active');
+            document.querySelectorAll('#tab-buttons button').forEach(btn => {
+                if (btn.querySelector('span')) return;
+                btn.classList.remove('bg-white', 'shadow-sm', 'border-brand-200', 'text-brand-700');
+                btn.classList.add('text-slate-600', 'border-transparent');
+            });
+            element.classList.remove('text-slate-600', 'border-transparent');
+            element.classList.add('bg-white', 'shadow-sm', 'border-brand-200', 'text-brand-700');
+        }
+    </script>
+</body>
+</html>
