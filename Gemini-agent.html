@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini Agent | Internal Platform Modernization</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            blue: '#4285F4',
+                            purple: '#9B72CB',
+                            red: '#D96570',
+                            dark: '#0F172A',
+                            surface: '#F8FAFC'
+                        }
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        
+        .text-gradient {
+            background: linear-gradient(90deg, #4285F4, #9B72CB, #D96570);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .bg-gradient-custom {
+            background: linear-gradient(135deg, rgba(66, 133, 244, 0.08) 0%, rgba(155, 114, 203, 0.08) 50%, rgba(217, 101, 112, 0.08) 100%);
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border-color: #9B72CB;
+        }
+
+        .prompt-bubble {
+            position: relative;
+            background: #ffffff;
+            border-radius: .5rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        
+        .step-connector::after {
+            content: '';
+            position: absolute;
+            top: 2rem;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: #e2e8f0;
+            z-index: 0;
+        }
+        @media (max-width: 768px) {
+            .step-connector::after { display: none; }
+        }
+
+        /* Tab Content Styling */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-brand-surface text-slate-800 antialiased selection:bg-brand-purple selection:text-white">
+
+    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="sparkles" class="text-brand-purple h-6 w-6"></i>
+                    <span class="font-bold text-xl tracking-tight text-brand-dark">Gemini <span class="text-gradient">Ecosystem</span></span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#how-it-works" class="text-sm text-slate-600 hover:text-brand-blue font-medium transition-colors">Architecture</a>
+                    <a href="#platform-capabilities" class="text-sm text-slate-600 hover:text-brand-blue font-medium transition-colors">Platform Use Cases</a>
+                    <a href="#response-comparison" class="text-sm text-slate-600 hover:text-brand-blue font-medium transition-colors">Live Responses</a>
+                    <a href="#comparison" class="text-sm text-slate-600 hover:text-brand-blue font-medium transition-colors">Technical Matrix</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="relative overflow-hidden bg-gradient-custom py-24 lg:py-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-fade-in-up">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-brand-purple/20 text-brand-purple text-sm font-semibold mb-6 shadow-sm">
+                <i data-lucide="server-cog" class="h-4 w-4"></i> Internal Product & Platform Operations
+            </div>
+            <h1 class="text-4xl md:text-6xl font-extrabold text-brand-dark tracking-tight mb-6 leading-tight">
+                Scale Your Platform <br/><span class="text-gradient">Modernization</span>
+            </h1>
+            <p class="mt-4 max-w-3xl text-lg md:text-xl text-slate-600 mx-auto mb-10">
+                Accelerate your 18-month Salesforce FSC migration, QA your new Angular Client Central portal, and continuously supervise your GenAI RAG tools. The Gemini Agent works directly across your internal environments.
+            </p>
+            <div class="flex justify-center gap-4">
+                <a href="#platform-capabilities" class="bg-brand-dark text-white px-6 py-3 rounded-full font-semibold hover:bg-slate-800 transition-colors shadow-lg flex items-center gap-2">
+                    Explore Platform Use Cases <i data-lucide="arrow-down" class="h-4 w-4"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section id="how-it-works" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-brand-dark sm:text-4xl">The Agentic Architecture</h2>
+                <p class="mt-4 text-lg text-slate-600 max-w-2xl mx-auto">Unlike standard LLMs that only generate text, the Gemini Agent operates on a continuous feedback loop, enabling it to course-correct and complete long-horizon technical tasks.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
+                <div class="relative text-center step-connector z-10">
+                    <div class="w-16 h-16 mx-auto bg-white border-2 border-brand-blue rounded-full flex items-center justify-center mb-4 relative z-10 shadow-md">
+                        <i data-lucide="eye" class="h-6 w-6 text-brand-blue"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2 text-brand-dark">1. Observe</h3>
+                    <p class="text-sm text-slate-600">Views legacy .NET UIs, reads SharePoint knowledge bases, and analyzes RAG outputs.</p>
+                </div>
+                <div class="relative text-center step-connector z-10">
+                    <div class="w-16 h-16 mx-auto bg-white border-2 border-brand-purple rounded-full flex items-center justify-center mb-4 relative z-10 shadow-md">
+                        <i data-lucide="git-branch-plus" class="h-6 w-6 text-brand-purple"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2 text-brand-dark">2. Think & Plan</h3>
+                    <p class="text-sm text-slate-600">Breaks down complex migrations (like Salesforce Lightning to FSC) into actionable sub-tasks.</p>
+                </div>
+                <div class="relative text-center step-connector z-10">
+                    <div class="w-16 h-16 mx-auto bg-white border-2 border-brand-red rounded-full flex items-center justify-center mb-4 relative z-10 shadow-md">
+                        <i data-lucide="mouse-pointer-click" class="h-6 w-6 text-brand-red"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2 text-brand-dark">3. Act</h3>
+                    <p class="text-sm text-slate-600">Takes control. Interacts with web portals, writes Cypress E2E tests, or publishes SharePoint articles.</p>
+                </div>
+                <div class="relative text-center z-10">
+                    <div class="w-16 h-16 mx-auto bg-white border-2 border-green-500 rounded-full flex items-center justify-center mb-4 relative z-10 shadow-md">
+                        <i data-lucide="refresh-cw" class="h-6 w-6 text-green-500"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2 text-brand-dark">4. Reflect</h3>
+                    <p class="text-sm text-slate-600">Evaluates the result. If a legacy UI state changes or a script fails, it adapts and tries a new path.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="platform-capabilities" class="py-20 bg-slate-50 border-y border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="text-brand-purple font-bold tracking-wider uppercase text-sm mb-2 block">Internal Platform Ownership</span>
+                <h2 class="text-3xl font-bold text-brand-dark sm:text-4xl">Accelerating the Transformation</h2>
+                <p class="mt-4 text-lg text-slate-600">How Product, UX, and Strategy stakeholders leverage the Agent across core platforms.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <div class="bg-white rounded-2xl p-8 border border-slate-200 card-hover flex flex-col h-full shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-4">
+                            <div class="p-3 bg-blue-100 rounded-lg text-brand-blue">
+                                <i data-lucide="cloud" class="h-7 w-7"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-brand-dark">Salesforce Migration</h3>
+                        </div>
+                        <span class="bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded font-semibold border border-slate-200">Product & Ops</span>
+                    </div>
+                    <p class="text-slate-600 mb-6 flex-grow">
+                        Gemini Agent autonomously navigates both legacy Salesforce Lightning and the new Financial Services Cloud (FSC) environments, executing identical client onboarding workflows to identify field mapping errors and UI friction.
+                    </p>
+                    <div class="mt-auto">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Example Prompt</span>
+                            <button onclick="copyPrompt(this, 'prompt-sf')" class="text-xs flex items-center gap-1 text-brand-blue hover:text-blue-700 font-semibold transition-colors bg-blue-50 px-2 py-1 rounded">
+                                <i data-lucide="copy" class="h-3 w-3"></i> Copy
+                            </button>
+                        </div>
+                        <div class="prompt-bubble p-4">
+                            <p id="prompt-sf" class="text-sm text-slate-700 italic">"Log into both the legacy Lightning and new FSC staging environments. Execute the 'High Net Worth Client Onboarding' workflow in both. Map any missing custom fields, log discrepancies in Jira, and draft a release note for the sales team."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-8 border border-slate-200 card-hover flex flex-col h-full shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-4">
+                            <div class="p-3 bg-purple-100 rounded-lg text-brand-purple">
+                                <i data-lucide="code-2" class="h-7 w-7"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-brand-dark">Client Central Upgrade</h3>
+                        </div>
+                        <span class="bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded font-semibold border border-slate-200">Engineering & UX</span>
+                    </div>
+                    <p class="text-slate-600 mb-6 flex-grow">
+                        Accelerates the transition of the "Client Central" C# .NET thick client to the new Angular thin web app. The Agent visually inspects legacy UI states and writes automated end-to-end tests for the Angular parity.
+                    </p>
+                    <div class="mt-auto">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Example Prompt</span>
+                            <button onclick="copyPrompt(this, 'prompt-cc')" class="text-xs flex items-center gap-1 text-brand-blue hover:text-blue-700 font-semibold transition-colors bg-blue-50 px-2 py-1 rounded">
+                                <i data-lucide="copy" class="h-3 w-3"></i> Copy
+                            </button>
+                        </div>
+                        <div class="prompt-bubble p-4">
+                            <p id="prompt-cc" class="text-sm text-slate-700 italic">"Open the Client Central .NET application and navigate to the 'Account Servicing' tab. Capture the exact state and business logic, then generate the corresponding Angular component structure and Cypress E2E tests for the new web portal."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-8 border border-slate-200 card-hover flex flex-col h-full shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-4">
+                            <div class="p-3 bg-red-100 rounded-lg text-brand-red">
+                                <i data-lucide="book-open" class="h-7 w-7"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-brand-dark">Knowledge Management</h3>
+                        </div>
+                        <span class="bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded font-semibold border border-slate-200">Strategy & Data</span>
+                    </div>
+                    <p class="text-slate-600 mb-6 flex-grow">
+                        Continuously evaluates the internal Gemini 2.5 Flash RAG platform. The Agent simulates advisor queries, identifies hallucinations or missing data, and autonomously drafts and publishes remediation articles to SharePoint.
+                    </p>
+                    <div class="mt-auto">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Example Prompt</span>
+                            <button onclick="copyPrompt(this, 'prompt-rag')" class="text-xs flex items-center gap-1 text-brand-blue hover:text-blue-700 font-semibold transition-colors bg-blue-50 px-2 py-1 rounded">
+                                <i data-lucide="copy" class="h-3 w-3"></i> Copy
+                            </button>
+                        </div>
+                        <div class="prompt-bubble p-4">
+                            <p id="prompt-rag" class="text-sm text-slate-700 italic">"Run the top 50 client-servicing queries from yesterday through our Gemini 2.5 Flash RAG tool. Cross-reference the answers against the master compliance policies. For any inaccurate responses, draft a corrected SharePoint article and route it to the content team."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-8 border border-slate-200 card-hover flex flex-col h-full shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-4">
+                            <div class="p-3 bg-green-100 rounded-lg text-green-600">
+                                <i data-lucide="graduation-cap" class="h-7 w-7"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-brand-dark">Advisor Enablement</h3>
+                        </div>
+                        <span class="bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded font-semibold border border-slate-200">Supervision & Training</span>
+                    </div>
+                    <p class="text-slate-600 mb-6 flex-grow">
+                        Mitigates platform fatigue during the 18-month FSC and Angular transitions by automatically generating up-to-date, step-by-step training modules and compliance-approved screencasts for service reps.
+                    </p>
+                    <div class="mt-auto">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Example Prompt</span>
+                            <button onclick="copyPrompt(this, 'prompt-train')" class="text-xs flex items-center gap-1 text-brand-blue hover:text-blue-700 font-semibold transition-colors bg-blue-50 px-2 py-1 rounded">
+                                <i data-lucide="copy" class="h-3 w-3"></i> Copy
+                            </button>
+                        </div>
+                        <div class="prompt-bubble p-4">
+                            <p id="prompt-train" class="text-sm text-slate-700 italic">"Record a simulated walkthrough of opening a margin account in the new Angular Client Central app. Generate a step-by-step PDF training guide with screenshots, ensure it meets FINRA supervision guidelines, and email it to the regional branch managers."</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="response-comparison" class="py-20 bg-white">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-brand-dark sm:text-4xl">One Prompt. Four Models.</h2>
+                <p class="mt-4 text-lg text-slate-600">See how different versions of Gemini approach a cross-platform data discrepancy.</p>
+            </div>
+
+            <div class="bg-slate-800 rounded-xl p-6 mb-8 text-white shadow-lg relative">
+                <div class="absolute -top-3 left-6 bg-brand-purple text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">The Triage Request</div>
+                <p class="text-lg italic font-light mt-2">"A service rep reported that the new Angular Client Central app shows a different Required Minimum Distribution (RMD) calculation than the legacy .NET thick client for account #8892. Investigate the discrepancy and resolve it."</p>
+            </div>
+
+            <div class="flex flex-wrap border-b border-slate-200 mb-6">
+                <button onclick="switchTab('flash')" id="tab-flash" class="tab-btn flex-1 py-4 px-1 text-center border-b-2 border-brand-blue font-semibold text-brand-blue bg-blue-50/50 transition-colors">
+                    <i data-lucide="zap" class="inline-block h-4 w-4 mr-1 mb-0.5"></i> Gemini Flash
+                </button>
+                <button onclick="switchTab('pro')" id="tab-pro" class="tab-btn flex-1 py-4 px-1 text-center border-b-2 border-transparent font-medium text-slate-500 hover:text-slate-700 hover:border-slate-300 transition-colors">
+                    <i data-lucide="pen-tool" class="inline-block h-4 w-4 mr-1 mb-0.5"></i> Gemini Pro
+                </button>
+                <button onclick="switchTab('thinking')" id="tab-thinking" class="tab-btn flex-1 py-4 px-1 text-center border-b-2 border-transparent font-medium text-slate-500 hover:text-slate-700 hover:border-slate-300 transition-colors">
+                    <i data-lucide="brain" class="inline-block h-4 w-4 mr-1 mb-0.5"></i> Gemini Thinking
+                </button>
+                <button onclick="switchTab('agent')" id="tab-agent" class="tab-btn flex-1 py-4 px-1 text-center border-b-2 border-transparent font-medium text-slate-500 hover:text-slate-700 hover:border-slate-300 transition-colors">
+                    <i data-lucide="bot" class="inline-block h-4 w-4 mr-1 mb-0.5 text-brand-purple"></i> Gemini Agent
+                </button>
+            </div>
+
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-6 min-h-[300px]">
+                
+                <div id="content-flash" class="tab-content active text-slate-700">
+                    <div class="flex items-center gap-2 mb-4 pb-2 border-b border-slate-200">
+                        <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded">Focus: Fast Data Retrieval</span>
+                    </div>
+                    <p class="font-semibold mb-2">Discrepancy Confirmed.</p>
+                    <p class="text-sm mb-4">I checked the logs for account #8892. The legacy .NET thick client is calculating an RMD of $4,200. The new Angular web app is calculating an RMD of $0. The .NET app appears to be using an outdated calculation library, while the Angular app is hitting the modern microservice.</p>
+                    <p class="font-semibold text-sm">Next Steps:</p>
+                    <ul class="list-disc pl-5 text-sm space-y-1">
+                        <li>Notify the service rep to trust the Angular application.</li>
+                        <li>Submit a bug report to the legacy .NET maintenance team.</li>
+                    </ul>
+                </div>
+
+                <div id="content-pro" class="tab-content text-slate-700">
+                    <div class="flex items-center gap-2 mb-4 pb-2 border-b border-slate-200">
+                        <span class="bg-slate-200 text-slate-800 text-xs font-bold px-2 py-1 rounded">Focus: Articulation & Context</span>
+                    </div>
+                    <p class="mb-3 text-sm">Based on a review of account #8892 and the current regulatory environment, the discrepancy stems from outdated business logic in the legacy application.</p>
+                    <div class="bg-white p-4 rounded border border-slate-200 text-sm mb-4">
+                        <p class="mb-2"><strong>The Root Cause:</strong> The client for account #8892 is 72 years old. The legacy .NET application calculates the Required Minimum Distribution (RMD) using the old age threshold of 72. However, the new Angular application correctly factors in the SECURE 2.0 Act, which raised the RMD age to 73 for individuals born between 1951 and 1959.</p>
+                        <p><strong>Conclusion:</strong> The Angular application is correct; no RMD is required for this client this year. The .NET application is exposing the firm to compliance risk by instructing clients to take unnecessary taxable distributions.</p>
+                    </div>
+                    <p class="font-semibold mb-2 text-sm">Recommended Action:</p>
+                    <p class="text-sm">The product team should immediately patch the .NET application or deprecate its RMD module, forcing all RMD calculations to be processed through the new Angular portal.</p>
+                </div>
+
+                <div id="content-thinking" class="tab-content text-slate-700">
+                    <div class="flex items-center gap-2 mb-4 pb-2 border-b border-slate-200">
+                        <span class="bg-purple-100 text-purple-800 text-xs font-bold px-2 py-1 rounded">Focus: Deep Logical Tracing</span>
+                    </div>
+                    <div class="mb-4 bg-slate-100 p-3 rounded text-xs font-mono text-slate-500 border border-slate-200 border-l-4 border-l-brand-purple">
+                        &lt;thought&gt;<br/>
+                        Investigating account #8892 discrepancy.<br/>
+                        Step 1: Check client demographics. DOB is March 14, 1954. Client turned 72 in 2026.<br/>
+                        Step 2: Check IRS regulations. SECURE 2.0 Act changed RMD starting age.<br/>
+                        For DOB 1951-1959, new RMD age is 73. Therefore, client #8892 does NOT have an RMD for 2026.<br/>
+                        Step 3: Analyze application logic.<br/>
+                        - Legacy .NET app source: `if (age >= 72) calculateRMD()`. This is hardcoded and obsolete.<br/>
+                        - Angular app source: Hits `/api/v2/rmd-calc` which correctly evaluates SECURE 2.0 rules. Returns $0.<br/>
+                        Risk Assessment: If reps use the .NET app, clients will incur unnecessary income tax. High severity.<br/>
+                        &lt;/thought&gt;
+                    </div>
+                    <p class="text-sm mb-3">The Angular application is calculating the correct value ($0). The legacy .NET app is utilizing hardcoded, pre-SECURE 2.0 Act logic.</p>
+                    <p class="text-sm mb-4">Because the client was born in 1954, their RMD age is 73. The .NET app triggers an RMD at age 72, which is no longer legally accurate. If service reps use the .NET calculation, they risk giving clients false tax information.</p>
+                </div>
+
+                <div id="content-agent" class="tab-content text-slate-700">
+                    <div class="flex items-center gap-2 mb-4 pb-2 border-b border-slate-200">
+                        <span class="bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-bold px-2 py-1 rounded">Focus: Autonomous Resolution</span>
+                    </div>
+                    <p class="text-sm mb-4">I verified the discrepancy: the legacy .NET app is using outdated SECURE 2.0 Act logic (triggering at age 72 instead of 73), while the Angular app is correct. I have intervened to prevent any compliance or tax issues for the client.</p>
+                    
+                    <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i data-lucide="shield-alert" class="h-4 w-4 text-brand-red"></i>
+                            <h4 class="font-bold text-sm text-brand-dark">Actions Executed & Pending</h4>
+                        </div>
+                        
+                        <ul class="text-sm text-slate-600 space-y-2 mb-4">
+                            <li class="flex items-center gap-2"><i data-lucide="check-circle" class="h-4 w-4 text-green-500"></i> Temporarily disabled the RMD UI module in the .NET Client Central production build using feature flags.</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check-circle" class="h-4 w-4 text-green-500"></i> Automatically replied to the service rep, confirming the Angular app is correct and advising them to proceed.</li>
+                            <li class="flex items-center gap-2"><i data-lucide="clock" class="h-4 w-4 text-amber-500"></i> Pending: Publish a flash update to the SharePoint Knowledge Base regarding the SECURE 2.0 calculation change.</li>
+                        </ul>
+                        
+                        <div class="flex gap-2">
+                            <button class="bg-brand-red text-white text-xs px-3 py-2 rounded font-semibold hover:bg-red-700 transition-colors">Create P1 Jira Ticket</button>
+                            <button class="bg-white border border-slate-300 text-slate-700 text-xs px-3 py-2 rounded font-semibold hover:bg-slate-50 transition-colors">Publish SharePoint Update</button>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-500 italic">Please approve the creation of the Jira ticket and the SharePoint Knowledge Base update.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="comparison" class="py-20 bg-white border-t border-slate-200">
+        <div class="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-brand-dark sm:text-4xl">The Gemini 3.0 Lineup</h2>
+                <p class="mt-4 text-lg text-slate-600">A detailed technical breakdown of the entire Gemini 3.0 ecosystem.</p>
+            </div>
+
+            <div class="overflow-x-auto rounded-xl shadow-sm border border-slate-200 bg-white">
+                <table class="min-w-full divide-y divide-slate-200 text-left">
+                    <thead class="bg-slate-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-4 font-semibold text-slate-800 tracking-wider">Model Variant</th>
+                            <th scope="col" class="px-6 py-4 font-semibold text-slate-800 tracking-wider">Primary Focus</th>
+                            <th scope="col" class="px-6 py-4 font-semibold text-slate-800 tracking-wider">Context Window</th>
+                            <th scope="col" class="px-6 py-4 font-semibold text-slate-800 tracking-wider">Multimodality</th>
+                            <th scope="col" class="px-6 py-4 font-semibold text-slate-800 tracking-wider">Reasoning Depth</th>
+                            <th scope="col" class="px-6 py-4 font-semibold text-slate-800 tracking-wider">Tool Access & Autonomy</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-slate-200 text-sm">
+                        
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap font-bold text-brand-blue">Gemini 3.0 Flash</td>
+                            <td class="px-6 py-4 text-slate-600">Speed & Efficiency</td>
+                            <td class="px-6 py-4 text-slate-600 font-mono text-xs">2M Tokens</td>
+                            <td class="px-6 py-4 text-slate-600">Text, Vision, Audio</td>
+                            <td class="px-6 py-4 text-slate-600">Standard</td>
+                            <td class="px-6 py-4 text-slate-500 italic">API Functions Only</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap font-bold text-brand-purple">Gemini 3.0 Thinking</td>
+                            <td class="px-6 py-4 text-slate-600">Logic & Code QA</td>
+                            <td class="px-6 py-4 text-slate-600 font-mono text-xs">1M Tokens</td>
+                            <td class="px-6 py-4 text-slate-600">Text & Code Heavy</td>
+                            <td class="px-6 py-4 text-slate-600">Advanced (CoT)</td>
+                            <td class="px-6 py-4 text-slate-500 italic">API Functions Only</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap font-bold text-slate-800">Gemini 3.0 Pro</td>
+                            <td class="px-6 py-4 text-slate-600">Balanced Performance</td>
+                            <td class="px-6 py-4 text-slate-600 font-mono text-xs">2M Tokens</td>
+                            <td class="px-6 py-4 text-slate-600">Native (All Modalities)</td>
+                            <td class="px-6 py-4 text-slate-600">Advanced</td>
+                            <td class="px-6 py-4 text-slate-500 italic">API & Workspace Integration</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap font-bold text-slate-800">Gemini 3.0 Deep Thinking</td>
+                            <td class="px-6 py-4 text-slate-600">Maximum Reasoning</td>
+                            <td class="px-6 py-4 text-slate-600 font-mono text-xs">2M Tokens</td>
+                            <td class="px-6 py-4 text-slate-600">Text & Vision Focus</td>
+                            <td class="px-6 py-4 text-slate-600 font-bold">Maximum (Long-Horizon)</td>
+                            <td class="px-6 py-4 text-slate-500 italic">API & Code Execution</td>
+                        </tr>
+
+                        <tr class="bg-purple-50/60 hover:bg-purple-100/60 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 flex items-center gap-2">
+                                <i data-lucide="bot" class="h-5 w-5 text-brand-purple"></i> Gemini 3.0 Agent
+                            </td>
+                            <td class="px-6 py-4 text-slate-800 font-medium">Execution & Autonomy</td>
+                            <td class="px-6 py-4 text-slate-800 font-mono text-xs font-bold">Infinite Loop</td>
+                            <td class="px-6 py-4 text-slate-800 font-medium">Native + Screen Perception</td>
+                            <td class="px-6 py-4 text-slate-800 font-medium">Advanced + Agentic Loop</td>
+                            <td class="px-6 py-4 text-slate-800 font-bold flex items-center gap-2">
+                                <i data-lucide="check-circle-2" class="h-4 w-4 text-green-500"></i> Full Computer Use & Web
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="bg-brand-dark text-slate-400 py-10 text-center border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col items-center justify-center gap-4">
+            <div class="flex items-center gap-2">
+                <i data-lucide="sparkles" class="text-slate-500 h-6 w-6"></i>
+                <span class="font-bold text-xl text-slate-200 tracking-tight">Gemini Ecosystem</span>
+            </div>
+            <p class="text-sm max-w-md mx-auto">&copy; 2026 Designed and coded entirely by Gemini Agent. Internal platform examples are illustrative.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // Copy Prompt Logic
+        function copyPrompt(buttonElement, targetId) {
+            let textToCopy = document.getElementById(targetId).innerText;
+            textToCopy = textToCopy.replace(/^"|"$/g, ''); 
+
+            const textArea = document.createElement("textarea");
+            textArea.value = textToCopy;
+            document.body.appendChild(textArea);
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                
+                const originalHTML = buttonElement.innerHTML;
+                buttonElement.innerHTML = `<i data-lucide="check" class="h-3 w-3 text-green-600"></i> <span class="text-green-600">Copied!</span>`;
+                lucide.createIcons(); 
+                
+                setTimeout(() => {
+                    buttonElement.innerHTML = originalHTML;
+                    lucide.createIcons();
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy text', err);
+            } finally {
+                document.body.removeChild(textArea);
+            }
+        }
+
+        // Tab Switching Logic for the Model Comparison Section
+        function switchTab(model) {
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('border-brand-blue', 'text-brand-blue', 'bg-blue-50/50');
+                btn.classList.add('border-transparent', 'text-slate-500');
+            });
+            
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            const activeBtn = document.getElementById('tab-' + model);
+            activeBtn.classList.remove('border-transparent', 'text-slate-500');
+            activeBtn.classList.add('border-brand-blue', 'text-brand-blue', 'bg-blue-50/50');
+            
+            document.getElementById('content-' + model).classList.add('active');
+        }
+    </script>
+</body>
+</html>
+
