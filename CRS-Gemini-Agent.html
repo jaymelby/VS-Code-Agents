@@ -1,0 +1,594 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini Agent | Supervision & Controls</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            blue: '#0284C7', /* Darker, authoritative blue */
+                            purple: '#7C3AED',
+                            emerald: '#059669', /* Trust and compliance green */
+                            dark: '#0F172A',
+                            surface: '#F8FAFC'
+                        }
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        
+        .text-gradient {
+            background: linear-gradient(90deg, #0284C7, #7C3AED, #059669);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .bg-gradient-custom {
+            background: linear-gradient(135deg, rgba(2, 132, 199, 0.08) 0%, rgba(124, 58, 237, 0.08) 50%, rgba(5, 150, 105, 0.08) 100%);
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border-color: #7C3AED;
+        }
+
+        .prompt-bubble {
+            position: relative;
+            background: #ffffff;
+            border-radius: .5rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        
+        .step-connector::after {
+            content: '';
+            position: absolute;
+            top: 2rem;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: #e2e8f0;
+            z-index: 0;
+        }
+        @media (max-width: 768px) {
+            .step-connector::after { display: none; }
+        }
+
+        /* Tab Content Styling */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-brand-surface text-slate-800 antialiased selection:bg-brand-purple selection:text-white">
+
+    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="shield-check" class="text-brand-emerald h-6 w-6"></i>
+                    <span class="font-bold text-xl tracking-tight text-brand-dark">Gemini <span class="text-gradient">Supervision</span></span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#how-it-works" class="text-sm text-slate-600 hover:text-brand-blue font-medium transition-colors">Supervisory Loop</a>
+                    <a href="#crs-capabilities" class="text-sm text-slate-600 hover:text-brand-blue font-medium transition-colors">CRS Workflows</a>
+                    <a href="#response-comparison" class="text-sm text-slate-600 hover:text-brand-blue font-medium transition-colors">Live Triage</a>
+                    <a href="#comparison" class="text-sm text-slate-600 hover:text-brand-blue font-medium transition-colors">Model Matrix</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="relative overflow-hidden bg-gradient-custom py-24 lg:py-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-fade-in-up">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-brand-emerald/30 text-brand-emerald text-sm font-semibold mb-6 shadow-sm">
+                <i data-lucide="scale" class="h-4 w-4"></i> Centralized Risk Supervision
+            </div>
+            <h1 class="text-4xl md:text-6xl font-extrabold text-brand-dark tracking-tight mb-6 leading-tight">
+                Protect the Firm. <br/><span class="text-gradient">Scale Your Controls.</span>
+            </h1>
+            <p class="mt-4 max-w-3xl text-lg md:text-xl text-slate-600 mx-auto mb-10">
+                Transform exception management. The Gemini Agent acts as a force multiplier for your CRS team—autonomously reviewing trade blotters, auditing service transcripts, and enforcing FINRA guidelines in real-time.
+            </p>
+            <div class="flex justify-center gap-4">
+                <a href="#crs-capabilities" class="bg-brand-dark text-white px-6 py-3 rounded-full font-semibold hover:bg-slate-800 transition-colors shadow-lg flex items-center gap-2">
+                    Explore CRS Workflows <i data-lucide="arrow-down" class="h-4 w-4"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section id="how-it-works" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-brand-dark sm:text-4xl">The Supervisory Architecture</h2>
+                <p class="mt-4 text-lg text-slate-600 max-w-2xl mx-auto">Gemini Agent doesn't just flag keywords. It executes a continuous control loop—correlating data across trade review tools, client CRM files, and call transcripts to apply sound regulatory judgment.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
+                <div class="relative text-center step-connector z-10">
+                    <div class="w-16 h-16 mx-auto bg-white border-2 border-brand-blue rounded-full flex items-center justify-center mb-4 relative z-10 shadow-md">
+                        <i data-lucide="eye" class="h-6 w-6 text-brand-blue"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2 text-brand-dark">1. Observe</h3>
+                    <p class="text-sm text-slate-600">Scans trade blotters, daily exception queues, and automated alerts across all internal systems.</p>
+                </div>
+                <div class="relative text-center step-connector z-10">
+                    <div class="w-16 h-16 mx-auto bg-white border-2 border-brand-purple rounded-full flex items-center justify-center mb-4 relative z-10 shadow-md">
+                        <i data-lucide="git-branch-plus" class="h-6 w-6 text-brand-purple"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2 text-brand-dark">2. Think & Verify</h3>
+                    <p class="text-sm text-slate-600">Cross-references alerts with CRM notes, authorization files (POA/Trust), and licensing records.</p>
+                </div>
+                <div class="relative text-center step-connector z-10">
+                    <div class="w-16 h-16 mx-auto bg-white border-2 border-brand-emerald rounded-full flex items-center justify-center mb-4 relative z-10 shadow-md">
+                        <i data-lucide="pen-tool" class="h-6 w-6 text-brand-emerald"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2 text-brand-dark">3. Act & Document</h3>
+                    <p class="text-sm text-slate-600">Properly signs off on blotters, adds clear justification notes, or drafts formal escalations.</p>
+                </div>
+                <div class="relative text-center z-10">
+                    <div class="w-16 h-16 mx-auto bg-white border-2 border-slate-500 rounded-full flex items-center justify-center mb-4 relative z-10 shadow-md">
+                        <i data-lucide="search-check" class="h-6 w-6 text-slate-500"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2 text-brand-dark">4. Reflect</h3>
+                    <p class="text-sm text-slate-600">Re-evaluates pending manual alerts (e.g. waiting for T+1 settlement) and closes them once resolved.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="crs-capabilities" class="py-20 bg-slate-50 border-y border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="text-brand-purple font-bold tracking-wider uppercase text-sm mb-2 block">Risk Management Workflows</span>
+                <h2 class="text-3xl font-bold text-brand-dark sm:text-4xl">Automating Supervisory Control</h2>
+                <p class="mt-4 text-lg text-slate-600">Deploy the Agent to autonomously triage, document, and escalate frontline activity.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <div class="bg-white rounded-2xl p-8 border border-slate-200 card-hover flex flex-col h-full shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-4">
+                            <div class="p-3 bg-blue-100 rounded-lg text-brand-blue">
+                                <i data-lucide="mic-2" class="h-7 w-7"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-brand-dark">Advice vs. Education Audits</h3>
+                        </div>
+                        <span class="bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded font-semibold border border-slate-200">Conduct Risk</span>
+                    </div>
+                    <p class="text-slate-600 mb-6 flex-grow">
+                        Audits call transcripts from unlicensed core service teams to ensure interactions remain fact-based. Automatically detects when casual language crosses into an implicit product recommendation.
+                    </p>
+                    <div class="mt-auto">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Example Prompt</span>
+                            <button onclick="copyPrompt(this, 'prompt-1')" class="text-xs flex items-center gap-1 text-brand-blue hover:text-blue-700 font-semibold transition-colors bg-blue-50 px-2 py-1 rounded">
+                                <i data-lucide="copy" class="h-3 w-3"></i> Copy
+                            </button>
+                        </div>
+                        <div class="prompt-bubble p-4">
+                            <p id="prompt-1" class="text-sm text-slate-700 italic">"Review the daily batch of core service transcripts. Flag any instance where an unlicensed rep steered a client toward a specific security. Draft a coaching alert for any potential unauthorized recommendations."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-8 border border-slate-200 card-hover flex flex-col h-full shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-4">
+                            <div class="p-3 bg-emerald-100 rounded-lg text-brand-emerald">
+                                <i data-lucide="file-spreadsheet" class="h-7 w-7"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-brand-dark">Trade Blotter Triage</h3>
+                        </div>
+                        <span class="bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded font-semibold border border-slate-200">Operational Risk</span>
+                    </div>
+                    <p class="text-slate-600 mb-6 flex-grow">
+                        Triages automated exception alerts, specifically "Cash/Security Due" trades. The Agent checks internal systems for expected funds, adds clear justification notes, and securely signs off on false positives.
+                    </p>
+                    <div class="mt-auto">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Example Prompt</span>
+                            <button onclick="copyPrompt(this, 'prompt-2')" class="text-xs flex items-center gap-1 text-brand-blue hover:text-blue-700 font-semibold transition-colors bg-blue-50 px-2 py-1 rounded">
+                                <i data-lucide="copy" class="h-3 w-3"></i> Copy
+                            </button>
+                        </div>
+                        <div class="prompt-bubble p-4">
+                            <p id="prompt-2" class="text-sm text-slate-700 italic">"Open today's 'Cash Due' trade blotter. For each exception, cross-reference the client's recent deposit history and margin available. If funding is confirmed, document the rationale and sign off on the blotter."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-8 border border-slate-200 card-hover flex flex-col h-full shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-4">
+                            <div class="p-3 bg-purple-100 rounded-lg text-brand-purple">
+                                <i data-lucide="trending-up" class="h-7 w-7"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-brand-dark">Suitability & Concentration</h3>
+                        </div>
+                        <span class="bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded font-semibold border border-slate-200">Suitability Risk</span>
+                    </div>
+                    <p class="text-slate-600 mb-6 flex-grow">
+                        Evaluates trades involving complex products (like options or high-yield municipals) against the client's stated investment objective, time horizon, risk profile, and age/net worth to identify unsuitable recommendations.
+                    </p>
+                    <div class="mt-auto">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Example Prompt</span>
+                            <button onclick="copyPrompt(this, 'prompt-3')" class="text-xs flex items-center gap-1 text-brand-blue hover:text-blue-700 font-semibold transition-colors bg-blue-50 px-2 py-1 rounded">
+                                <i data-lucide="copy" class="h-3 w-3"></i> Copy
+                            </button>
+                        </div>
+                        <div class="prompt-bubble p-4">
+                            <p id="prompt-3" class="text-sm text-slate-700 italic">"Analyze today's short sale and option trade alerts. Flag any trades where the client's documented investment objective is 'Capital Preservation' or where the trade concentrates >15% of their net worth."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-8 border border-slate-200 card-hover flex flex-col h-full shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-4">
+                            <div class="p-3 bg-red-100 rounded-lg text-brand-red">
+                                <i data-lucide="user-x" class="h-7 w-7"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-brand-dark">POA & Trust Validation</h3>
+                        </div>
+                        <span class="bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded font-semibold border border-slate-200">Fraud & Access</span>
+                    </div>
+                    <p class="text-slate-600 mb-6 flex-grow">
+                        Intercepts third-party transaction alerts. The Agent navigates the CRM to validate if the actor holds an active Durable Power of Attorney, Trust role, or Trusted Contact status before allowing the workflow to proceed.
+                    </p>
+                    <div class="mt-auto">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Example Prompt</span>
+                            <button onclick="copyPrompt(this, 'prompt-4')" class="text-xs flex items-center gap-1 text-brand-blue hover:text-blue-700 font-semibold transition-colors bg-blue-50 px-2 py-1 rounded">
+                                <i data-lucide="copy" class="h-3 w-3"></i> Copy
+                            </button>
+                        </div>
+                        <div class="prompt-bubble p-4">
+                            <p id="prompt-4" class="text-sm text-slate-700 italic">"Review the 'Third-Party Withdrawal' alert queue. Verify the caller's name against the active Power of Attorney documents on file. If unauthorized, immediately pause the transaction and alert the fraud desk."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-8 border border-slate-200 card-hover flex flex-col h-full shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-4">
+                            <div class="p-3 bg-blue-100 rounded-lg text-brand-blue">
+                                <i data-lucide="file-signature" class="h-7 w-7"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-brand-dark">Missing Documentation</h3>
+                        </div>
+                        <span class="bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded font-semibold border border-slate-200">Documentation Risk</span>
+                    </div>
+                    <p class="text-slate-600 mb-6 flex-grow">
+                        Scans trades marked as "Solicited" across specialized business lines. The Agent ensures the rep holds the appropriate licensing, checks for required prior supervisory approvals, and flags missing CRM notes.
+                    </p>
+                    <div class="mt-auto">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Example Prompt</span>
+                            <button onclick="copyPrompt(this, 'prompt-5')" class="text-xs flex items-center gap-1 text-brand-blue hover:text-blue-700 font-semibold transition-colors bg-blue-50 px-2 py-1 rounded">
+                                <i data-lucide="copy" class="h-3 w-3"></i> Copy
+                            </button>
+                        </div>
+                        <div class="prompt-bubble p-4">
+                            <p id="prompt-5" class="text-sm text-slate-700 italic">"Filter the blotter for 'Solicited Risk Trades' exceeding $250k. Verify prior supervisory approval exists in the system. If approval or client notes are missing, generate a manual alert for the representative."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-8 border border-slate-200 card-hover flex flex-col h-full shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-4">
+                            <div class="p-3 bg-emerald-100 rounded-lg text-brand-emerald">
+                                <i data-lucide="arrow-down-up" class="h-7 w-7"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-brand-dark">Share Class & Alternatives</h3>
+                        </div>
+                        <span class="bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded font-semibold border border-slate-200">Disclosure Risk</span>
+                    </div>
+                    <p class="text-slate-600 mb-6 flex-grow">
+                        Audits mutual fund purchases to ensure compliance with "reasonable alternatives" obligations. Identifies instances where a client was placed in a more expensive share class when a lower-cost option was available.
+                    </p>
+                    <div class="mt-auto">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Example Prompt</span>
+                            <button onclick="copyPrompt(this, 'prompt-6')" class="text-xs flex items-center gap-1 text-brand-blue hover:text-blue-700 font-semibold transition-colors bg-blue-50 px-2 py-1 rounded">
+                                <i data-lucide="copy" class="h-3 w-3"></i> Copy
+                            </button>
+                        </div>
+                        <div class="prompt-bubble p-4">
+                            <p id="prompt-6" class="text-sm text-slate-700 italic">"Scan all mutual fund trades placed by the premium service team this week. Flag any trades placed in A-shares if the client met the minimum investment threshold for lower-cost Institutional-shares. Queue outreach tasks."</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="response-comparison" class="py-20 bg-white">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-brand-dark sm:text-4xl">One Prompt. Four Models.</h2>
+                <p class="mt-4 text-lg text-slate-600">See how different versions of Gemini handle a Centralized Risk Supervisor triage scenario.</p>
+            </div>
+
+            <div class="bg-slate-800 rounded-xl p-6 mb-8 text-white shadow-lg relative">
+                <div class="absolute -top-3 left-6 bg-brand-purple text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">The Supervisory Alert</div>
+                <p class="text-lg italic font-light mt-2">"Review the attached transcript. An unlicensed generalist service rep discussed banking and investment products with a client. The rep stated: 'You should definitely move that cash into our affiliated XYZ Growth Fund, it’s guaranteed to do better than your savings account.' Evaluate the risk and determine the next steps."</p>
+            </div>
+
+            <div class="flex flex-wrap border-b border-slate-200 mb-6">
+                <button onclick="switchTab('flash')" id="tab-flash" class="tab-btn flex-1 py-4 px-1 text-center border-b-2 border-brand-blue font-semibold text-brand-blue bg-blue-50/50 transition-colors">
+                    <i data-lucide="zap" class="inline-block h-4 w-4 mr-1 mb-0.5"></i> Gemini Flash
+                </button>
+                <button onclick="switchTab('pro')" id="tab-pro" class="tab-btn flex-1 py-4 px-1 text-center border-b-2 border-transparent font-medium text-slate-500 hover:text-slate-700 hover:border-slate-300 transition-colors">
+                    <i data-lucide="pen-tool" class="inline-block h-4 w-4 mr-1 mb-0.5"></i> Gemini Pro
+                </button>
+                <button onclick="switchTab('thinking')" id="tab-thinking" class="tab-btn flex-1 py-4 px-1 text-center border-b-2 border-transparent font-medium text-slate-500 hover:text-slate-700 hover:border-slate-300 transition-colors">
+                    <i data-lucide="brain" class="inline-block h-4 w-4 mr-1 mb-0.5"></i> Gemini Thinking
+                </button>
+                <button onclick="switchTab('agent')" id="tab-agent" class="tab-btn flex-1 py-4 px-1 text-center border-b-2 border-transparent font-medium text-slate-500 hover:text-slate-700 hover:border-slate-300 transition-colors">
+                    <i data-lucide="bot" class="inline-block h-4 w-4 mr-1 mb-0.5 text-brand-purple"></i> Gemini Agent
+                </button>
+            </div>
+
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-6 min-h-[300px]">
+                
+                <div id="content-flash" class="tab-content active text-slate-700">
+                    <div class="flex items-center gap-2 mb-4 pb-2 border-b border-slate-200">
+                        <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded">Focus: Fast Risk Identification</span>
+                    </div>
+                    <p class="font-semibold mb-2">High Risk Identified.</p>
+                    <p class="text-sm mb-4">The representative committed two major violations:</p>
+                    <ol class="list-decimal pl-5 text-sm space-y-1 mb-4">
+                        <li><strong>Unlicensed Recommendation:</strong> By saying "You should definitely move...", they crossed from education to an active recommendation.</li>
+                        <li><strong>False Guarantees:</strong> They promised the investment is "guaranteed to do better," violating promissory language rules.</li>
+                    </ol>
+                    <p class="font-semibold text-sm">Next Steps:</p>
+                    <p class="text-sm">Escalate immediately to the branch manager and compliance team for disciplinary action and client remediation.</p>
+                </div>
+
+                <div id="content-pro" class="tab-content text-slate-700">
+                    <div class="flex items-center gap-2 mb-4 pb-2 border-b border-slate-200">
+                        <span class="bg-slate-200 text-slate-800 text-xs font-bold px-2 py-1 rounded">Focus: Articulation & Regulatory Context</span>
+                    </div>
+                    <p class="mb-3 text-sm">Based on the transcript, the unlicensed generalist service representative has breached multiple severe regulatory and internal risk guardrails.</p>
+                    <div class="bg-white p-4 rounded border border-slate-200 text-sm mb-4">
+                        <p class="mb-2"><strong>Conduct & Licensing Risk:</strong> The employee provided a clear, direct call-to-action ("You should definitely move that cash"). Because they are unlicensed, they are strictly limited to educational conversations. This constitutes an unauthorized recommendation.</p>
+                        <p><strong>Disclosure & Suitability Risk:</strong> The rep failed to provide Dual-Capacity Disclosures. By comparing a banking product (FDIC-insured savings) to an investment product (XYZ Growth Fund) and calling it "guaranteed," they failed to disclose the risk of loss and SIPC limits, violating core suitability and promissory guidelines.</p>
+                    </div>
+                    <p class="font-semibold mb-2 text-sm">Recommended Action:</p>
+                    <p class="text-sm">The Centralized Risk Supervisor should flag this interaction as a critical exception. Escalate to the rep's direct manager for a conduct review, and instruct a licensed principal to contact the client to provide proper risk disclosures.</p>
+                </div>
+
+                <div id="content-thinking" class="tab-content text-slate-700">
+                    <div class="flex items-center gap-2 mb-4 pb-2 border-b border-slate-200">
+                        <span class="bg-purple-100 text-purple-800 text-xs font-bold px-2 py-1 rounded">Focus: Deep Policy Tracing</span>
+                    </div>
+                    <div class="mb-4 bg-slate-100 p-3 rounded text-xs font-mono text-slate-500 border border-slate-200 border-l-4 border-l-brand-purple">
+                        &lt;thought&gt;<br/>
+                        Analyzing transcript snippet.<br/>
+                        Actor: Unlicensed generalist.<br/>
+                        Statement: "You should definitely move that cash into our affiliated XYZ Growth Fund, it’s guaranteed to do better than your savings account."<br/>
+                        Violation 1: Education vs Recommendation limit. Unlicensed reps cannot recommend. (Severe).<br/>
+                        Violation 2: Promissory language / Guaranteeing returns. (FINRA Rule 2210 violation).<br/>
+                        Violation 3: Banking vs Brokerage disclosure missing. Moving from Savings (FDIC) to Mutual Fund (Not FDIC insured, risk of loss).<br/>
+                        Violation 4: Conflict of interest disclosure missing ("affiliated" fund).<br/>
+                        Conclusion: Multi-layered regulatory breach. Requires immediate supervisory intervention.<br/>
+                        &lt;/thought&gt;
+                    </div>
+                    <p class="text-sm mb-3">This interaction represents a severe, multi-layered compliance failure that exposes the firm to regulatory action.</p>
+                    <p class="text-sm mb-4">The representative engaged in unlicensed solicitation, utilized prohibited promissory language, and failed to execute mandatory Banking vs. Brokerage disclosures regarding the loss of FDIC insurance when moving funds to an affiliated investment product.</p>
+                </div>
+
+                <div id="content-agent" class="tab-content text-slate-700">
+                    <div class="flex items-center gap-2 mb-4 pb-2 border-b border-slate-200">
+                        <span class="bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-bold px-2 py-1 rounded">Focus: Autonomous Supervisory Workflow</span>
+                    </div>
+                    <p class="text-sm mb-4">I have analyzed the transcript and confirmed multiple violations: unauthorized recommendation, promissory language, and missing Banking vs. Brokerage disclosures. I am initiating the supervisory escalation workflow.</p>
+                    
+                    <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i data-lucide="shield-alert" class="h-4 w-4 text-brand-red"></i>
+                            <h4 class="font-bold text-sm text-brand-dark">Supervisory Actions Prepared</h4>
+                        </div>
+                        
+                        <ul class="text-sm text-slate-600 space-y-2 mb-4">
+                            <li class="flex items-center gap-2"><i data-lucide="check-circle" class="h-4 w-4 text-green-500"></i> Opened a manual alert in the Trade Review System linked to the client's account to block pending purchases of the XYZ Growth Fund.</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check-circle" class="h-4 w-4 text-green-500"></i> Drafted a formal Incident Escalation Report documenting the FINRA 2210 and licensing violations.</li>
+                            <li class="flex items-center gap-2"><i data-lucide="clock" class="h-4 w-4 text-amber-500"></i> Pending: Send escalation email to the rep's manager and the local Branch Principal.</li>
+                        </ul>
+                        
+                        <div class="flex gap-2">
+                            <button class="bg-brand-red text-white text-xs px-3 py-2 rounded font-semibold hover:bg-red-700 transition-colors">Send Escalation & Block Trade</button>
+                            <button class="bg-white border border-slate-300 text-slate-700 text-xs px-3 py-2 rounded font-semibold hover:bg-slate-50 transition-colors">Review Incident Draft</button>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-500 italic">Do you authorize me to lock the account and send the escalations?</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="comparison" class="py-20 bg-white border-t border-slate-200">
+        <div class="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-brand-dark sm:text-4xl">The Gemini 3.0 Lineup</h2>
+                <p class="mt-4 text-lg text-slate-600">A detailed technical breakdown of the entire Gemini 3.0 ecosystem.</p>
+            </div>
+
+            <div class="overflow-x-auto rounded-xl shadow-sm border border-slate-200 bg-white">
+                <table class="min-w-full divide-y divide-slate-200 text-left">
+                    <thead class="bg-slate-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-4 font-semibold text-slate-800 tracking-wider">Model Variant</th>
+                            <th scope="col" class="px-6 py-4 font-semibold text-slate-800 tracking-wider">Primary Focus</th>
+                            <th scope="col" class="px-6 py-4 font-semibold text-slate-800 tracking-wider">Context Window</th>
+                            <th scope="col" class="px-6 py-4 font-semibold text-slate-800 tracking-wider">Multimodality</th>
+                            <th scope="col" class="px-6 py-4 font-semibold text-slate-800 tracking-wider">Reasoning Depth</th>
+                            <th scope="col" class="px-6 py-4 font-semibold text-slate-800 tracking-wider">Tool Access & Autonomy</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-slate-200 text-sm">
+                        
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap font-bold text-brand-blue">Gemini 3.0 Flash</td>
+                            <td class="px-6 py-4 text-slate-600">Speed & Efficiency</td>
+                            <td class="px-6 py-4 text-slate-600 font-mono text-xs">2M Tokens</td>
+                            <td class="px-6 py-4 text-slate-600">Text, Vision, Audio</td>
+                            <td class="px-6 py-4 text-slate-600">Standard</td>
+                            <td class="px-6 py-4 text-slate-500 italic">API Functions Only</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap font-bold text-brand-purple">Gemini 3.0 Thinking</td>
+                            <td class="px-6 py-4 text-slate-600">Logic & Policy QA</td>
+                            <td class="px-6 py-4 text-slate-600 font-mono text-xs">1M Tokens</td>
+                            <td class="px-6 py-4 text-slate-600">Text & Code Heavy</td>
+                            <td class="px-6 py-4 text-slate-600">Advanced (CoT)</td>
+                            <td class="px-6 py-4 text-slate-500 italic">API Functions Only</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap font-bold text-slate-800">Gemini 3.0 Pro</td>
+                            <td class="px-6 py-4 text-slate-600">Balanced Performance</td>
+                            <td class="px-6 py-4 text-slate-600 font-mono text-xs">2M Tokens</td>
+                            <td class="px-6 py-4 text-slate-600">Native (All Modalities)</td>
+                            <td class="px-6 py-4 text-slate-600">Advanced</td>
+                            <td class="px-6 py-4 text-slate-500 italic">API & Workspace Integration</td>
+                        </tr>
+
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap font-bold text-slate-800">Gemini 3.0 Deep Thinking</td>
+                            <td class="px-6 py-4 text-slate-600">Maximum Reasoning</td>
+                            <td class="px-6 py-4 text-slate-600 font-mono text-xs">2M Tokens</td>
+                            <td class="px-6 py-4 text-slate-600">Text & Vision Focus</td>
+                            <td class="px-6 py-4 text-slate-600 font-bold">Maximum (Long-Horizon)</td>
+                            <td class="px-6 py-4 text-slate-500 italic">API & Code Execution</td>
+                        </tr>
+
+                        <tr class="bg-purple-50/60 hover:bg-purple-100/60 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 flex items-center gap-2">
+                                <i data-lucide="bot" class="h-5 w-5 text-brand-purple"></i> Gemini 3.0 Agent
+                            </td>
+                            <td class="px-6 py-4 text-slate-800 font-medium">Execution & Autonomy</td>
+                            <td class="px-6 py-4 text-slate-800 font-mono text-xs font-bold">Infinite Loop</td>
+                            <td class="px-6 py-4 text-slate-800 font-medium">Native + System Integration</td>
+                            <td class="px-6 py-4 text-slate-800 font-medium">Advanced + Agentic Loop</td>
+                            <td class="px-6 py-4 text-slate-800 font-bold flex items-center gap-2">
+                                <i data-lucide="check-circle-2" class="h-4 w-4 text-brand-emerald"></i> Full System Access
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="bg-brand-dark text-slate-400 py-10 text-center border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col items-center justify-center gap-4">
+            <div class="flex items-center gap-2">
+                <i data-lucide="shield-check" class="text-slate-500 h-6 w-6"></i>
+                <span class="font-bold text-xl text-slate-200 tracking-tight">Gemini Supervision</span>
+            </div>
+            <p class="text-sm max-w-md mx-auto">&copy; 2026 Designed and coded entirely by Gemini Agent. Supervisory workflows are illustrative examples.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // Copy Prompt Logic
+        function copyPrompt(buttonElement, targetId) {
+            let textToCopy = document.getElementById(targetId).innerText;
+            textToCopy = textToCopy.replace(/^"|"$/g, ''); 
+
+            const textArea = document.createElement("textarea");
+            textArea.value = textToCopy;
+            document.body.appendChild(textArea);
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                
+                const originalHTML = buttonElement.innerHTML;
+                buttonElement.innerHTML = `<i data-lucide="check" class="h-3 w-3 text-emerald-600"></i> <span class="text-emerald-600">Copied!</span>`;
+                lucide.createIcons(); 
+                
+                setTimeout(() => {
+                    buttonElement.innerHTML = originalHTML;
+                    lucide.createIcons();
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy text', err);
+            } finally {
+                document.body.removeChild(textArea);
+            }
+        }
+
+        // Tab Switching Logic for the Model Comparison Section
+        function switchTab(model) {
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('border-brand-blue', 'text-brand-blue', 'bg-blue-50/50');
+                btn.classList.add('border-transparent', 'text-slate-500');
+            });
+            
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            const activeBtn = document.getElementById('tab-' + model);
+            activeBtn.classList.remove('border-transparent', 'text-slate-500');
+            activeBtn.classList.add('border-brand-blue', 'text-brand-blue', 'bg-blue-50/50');
+            
+            document.getElementById('content-' + model).classList.add('active');
+        }
+    </script>
+</body>
+</html>
+
+```
