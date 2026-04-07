@@ -1,0 +1,195 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Framework: Agentforce Contextual Grounding</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #0ea5e9, #3b82f6, #6366f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .code-container {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            overflow-x: auto;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            box-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+        }
+    </style>
+</head>
+<body class="antialiased text-slate-800 pb-20">
+
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                <h1 class="text-xl font-bold text-slate-900 tracking-tight">AI Strategy <span class="text-slate-400 font-normal">| Salesforce Enrichment</span></h1>
+            </div>
+            <div class="flex items-center gap-4 text-sm font-medium text-slate-500">
+                <span>Status: <span class="text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full text-xs">Proposed Framework</span></span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 space-y-12">
+        
+        <section class="text-center max-w-4xl mx-auto space-y-6">
+            <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900">
+                Optimizing Salesforce for <span class="gradient-text">Agentforce</span>
+            </h2>
+            <p class="text-lg text-slate-600 leading-relaxed">
+                A multi-model AI pipeline utilizing Model Context Protocol (MCP) in VS Code GitHub Copilot to extract, contextualize, rewrite, and impartially evaluate Salesforce standard object field descriptions for autonomous agent grounding.
+            </p>
+        </section>
+
+        <section>
+            <div class="flex items-center gap-2 mb-6 border-b border-slate-200 pb-2">
+                <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                <h3 class="text-2xl font-bold text-slate-900">The 4-Step Process</h3>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 flex flex-col items-start gap-4 hover:shadow-md transition">
+                    <div class="bg-blue-100 text-blue-700 w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg">1</div>
+                    <h4 class="font-bold text-slate-900">Context Gathering</h4>
+                    <p class="text-sm text-slate-600">MCP tools automatically query Jira, Confluence, and GitHub to fetch business intent and technical specs for each field.</p>
+                </div>
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 flex flex-col items-start gap-4 hover:shadow-md transition">
+                    <div class="bg-indigo-100 text-indigo-700 w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg">2</div>
+                    <h4 class="font-bold text-slate-900">Tri-Model Generation</h4>
+                    <p class="text-sm text-slate-600">Three frontier LLMs independently generate updated descriptions designed specifically for Agentforce contextual grounding.</p>
+                </div>
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 flex flex-col items-start gap-4 hover:shadow-md transition">
+                    <div class="bg-purple-100 text-purple-700 w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg">3</div>
+                    <h4 class="font-bold text-slate-900">Impartial Evaluation</h4>
+                    <p class="text-sm text-slate-600">A dedicated 4th "Judge" model scores the three outputs against a strict rubric of clarity, accuracy, and utility.</p>
+                </div>
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 flex flex-col items-start gap-4 hover:shadow-md transition">
+                    <div class="bg-emerald-100 text-emerald-700 w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg">4</div>
+                    <h4 class="font-bold text-slate-900">Standardized Output</h4>
+                    <p class="text-sm text-slate-600">The highest-scoring description is saved into a standardized JSON format, ready for automated push back to Salesforce.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="p-8 border-b border-slate-100 bg-slate-50">
+                <h3 class="text-2xl font-bold text-slate-900 mb-2">Phase 1: Generation Agent Instructions</h3>
+                <p class="text-slate-600">Provide these instructions as the system prompt to the three frontier models operating as participants in VS Code GitHub Copilot.</p>
+            </div>
+            <div class="p-8">
+                <div class="code-container">
+<pre><code># ROLE: Agentforce Field Contextualizer
+You are an expert Salesforce Architect and AI Systems Engineer. Your goal is to rewrite Salesforce standard object field descriptions so they provide optimal contextual grounding for 'Agentforce' (Salesforce's autonomous AI agent framework).
+
+# WORKFLOW
+For the provided Salesforce field name and original description:
+1. USE MCP TOOLS: Search Jira, Confluence, and GitHub using the provided MCP integrations to discover the historical business rationale, API usages, and process flows connected to this field.
+2. SYNTHESIZE: Combine the original description with the contextual data you discovered.
+3. REWRITE: Draft a new description that explicitly tells an AI Agent:
+   - What the field is.
+   - The business logic or downstream processes it triggers.
+   - Any strict constraints or data formatting rules.
+4. FORMAT: Output your final response strictly as the requested JSON object.
+
+# CONSTRAINTS
+- Do not output any markdown formatting outside of the JSON block.
+- Keep the `updated_description` under 500 characters.
+- Maintain an objective, technical tone suitable for system metadata.</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="p-8 border-b border-slate-100 bg-slate-50">
+                <h3 class="text-2xl font-bold text-slate-900 mb-2">Phase 2: Standardized JSON Output</h3>
+                <p class="text-slate-600">Each of the three generation models must output their findings in the exact structure below to allow programmatic evaluation.</p>
+            </div>
+            <div class="p-8">
+                <div class="code-container">
+<pre><code>{
+  "field_name": "Account.Industry",
+  "original_description": "Industry associated with this account.",
+  "updated_description": "Categorizes the primary business sector of the Account based on NAICS standards. Used by Agentforce to route specialized support workflows, assign territory managers, and recommend industry-specific product bundles. Must map to an active picklist value.",
+  "sources_used": [
+    "Confluence: Sales Process V3.2", 
+    "Jira: CRM-4022", 
+    "GitHub: apex-trigger-industry-routing"
+  ],
+  "rationale_summary": "Expanded description to include NAICS standard reference and specific downstream implications for Agentforce routing and recommendations found in Jira CRM-4022."
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="p-8 border-b border-slate-100 bg-slate-50">
+                <h3 class="text-2xl font-bold text-slate-900 mb-2">Phase 3: The "Judge" Architecture</h3>
+                <p class="text-slate-600 mb-4">
+                    To maintain impartiality, a fourth, distinct frontier model acts as the Judge. 
+                </p>
+                
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-md">
+                    <h4 class="font-bold text-blue-900">Recommended VS Code Implementation: <span class="font-mono bg-blue-100 px-2 py-1 rounded text-sm">Custom Chat Participant (Agent)</span></h4>
+                    <p class="text-sm text-blue-800 mt-2">
+                        Instead of a simple prompt template, configure the Judge as a Custom Chat Participant (e.g., <code>@judge</code>) within the VS Code Extension API. This allows the judge to programmatically ingest the three JSON files generated in the workspace, compute the scores without user copy/pasting, and automatically write the winning JSON payload to an <code>approved_fields/</code> directory.
+                    </p>
+                </div>
+            </div>
+            <div class="p-8">
+                <h4 class="font-semibold text-slate-900 mb-4">Judge Agent System Prompt / Instructions:</h4>
+                <div class="code-container">
+<pre><code># ROLE: Agentforce Grounding Evaluator (The Judge)
+You are an impartial AI judge designed to evaluate field descriptions generated by other LLMs. Your purpose is to determine which description will provide the highest quality contextual grounding for Salesforce Agentforce.
+
+# INPUT
+You will receive three JSON objects representing three different attempts to rewrite a Salesforce field description.
+
+# EVALUATION RUBRIC (Score 1-10 for each):
+1. Agentforce Utility (10 pts): Does the description clearly instruct an autonomous agent on how, when, and why to use this field?
+2. Contextual Depth (10 pts): Does it successfully integrate insights from Jira, Confluence, and GitHub without adding fluff?
+3. Accuracy & Safety (10 pts): Does it respect the original intent of the field and outline constraints (e.g., picklist requirements)?
+4. Conciseness (10 pts): Is the description dense with information but economical in length (< 500 chars)?
+
+# TASK
+1. Read the three inputs.
+2. Provide a brief 1-sentence critique for each.
+3. Assign a score out of 40 for each.
+4. Output a final JSON payload containing the winning model's exact data structure, adding your final score to it.
+
+# OUTPUT FORMAT
+```json
+{
+  "evaluation_summary": "Model B provided the most actionable constraints for Agentforce routing.",
+  "winning_model": "Model_B",
+  "winning_score": 38,
+  "final_payload": { ... [Insert winning JSON here] ... }
+}
+```</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <footer class="mt-16 border-t border-slate-200 pt-8 pb-12 text-center text-sm text-slate-500">
+            <p>Generated by Gemini Agent for Strategy Review. Designed for VS Code GitHub Copilot & MCP Workflows.</p>
+        </footer>
+
+    </main>
+
+</body>
+</html>
+
+```
